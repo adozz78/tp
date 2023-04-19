@@ -16,7 +16,10 @@ object ClimateService {
    * @param description "my awesome sentence contains a key word like climate change"
    * @return Boolean True
    */
-  def isClimateRelated(description: String): Boolean = ???
+  def isClimateRelated(description: String): Boolean = {
+    //return true if the String description contains some "climate related" words
+    description.toLowerCase.contains("global warming")||description.toLowerCase.contains("ipcc")||description.toLowerCase.contains("climate change")
+  }
 
   /**
    * parse a list of raw data and transport it with type into a list of CO2Record
@@ -26,8 +29,20 @@ object ClimateService {
    * you can access to Tuple with myTuple._1, myTuple._2, myTuple._3
    */
   def parseRawData(list: List[(Int, Int, Double)]) : List[Option[CO2Record]] = {
-    list.map { record => ??? }
-    ???
+    //The function converts each tuple into a CO2Record object
+    //with the same values for the timestamp, location, and CO2 concentration.
+    list.map { record =>
+      val parsedRecord = CO2Record(record._1, record._2, record._3)
+      //check if the CO2 concentration value is valid by calling the isValidPpmValue method
+      if (parsedRecord.isValidPpmValue) {
+        //return a Some object containing the CO2Record
+        Some(parsedRecord)
+      }
+      else {
+        //else return none
+        None
+      }
+    }
   }
 
   /**
@@ -36,7 +51,11 @@ object ClimateService {
    * @param list
    * @return a list
    */
-  def filterDecemberData(list: List[Option[CO2Record]]) : List[CO2Record] = ???
+  def filterDecemberData(list: List[Option[CO2Record]]) : List[CO2Record] = {
+    list
+      .flatMap(recordOption => recordOption) // remove None values from the list
+      .filter(record => record.month != 12) // filter out December records
+  }
 
 
   /**
