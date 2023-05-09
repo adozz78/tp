@@ -65,3 +65,8 @@ SELECT CASE
     ELSE 'others'
 END AS group_theme,    
 ```
+
+SELECT CASE
+WHEN ((lower("public"."news"."description"))  LIKE '%charles%' OR (lower("public"."news"."title"))  LIKE '%charles%') THEN 'charles'
+ELSE 'others'
+END AS is_charles_here, COUNT(is_charles_here);
